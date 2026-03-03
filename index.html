@@ -1,0 +1,1277 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>interFace — Propuesta Metodológica</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #070709;
+    --bg2: #0d0d14;
+    --cyan: #00e5c8;
+    --amber: #f5a623;
+    --rose: #ff4d6d;
+    --white: #f0ede8;
+    --muted: #4a4a5e;
+    --border: rgba(0,229,200,0.15);
+    --font-serif: 'Cormorant Garamond', Georgia, serif;
+    --font-mono: 'Space Mono', monospace;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  html { scroll-behavior: smooth; }
+  
+  body {
+    background: var(--bg);
+    color: var(--white);
+    font-family: var(--font-serif);
+    overflow-x: hidden;
+    line-height: 1.6;
+  }
+
+  /* ─── NOISE OVERLAY ─── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 100;
+    opacity: 0.6;
+  }
+
+  /* ─── SECTION BASE ─── */
+  section { position: relative; }
+
+  /* ─── HERO ─── */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    padding: 4rem 6rem;
+    gap: 4rem;
+    border-bottom: 1px solid var(--border);
+    background: radial-gradient(ellipse 60% 60% at 70% 50%, rgba(0,229,200,0.06) 0%, transparent 70%);
+  }
+
+  .hero-left { display: flex; flex-direction: column; gap: 2rem; }
+
+  .tag {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--cyan);
+    border: 1px solid var(--border);
+    display: inline-block;
+    padding: 0.4rem 1rem;
+    width: fit-content;
+  }
+
+  .hero-title {
+    font-family: var(--font-serif);
+    font-weight: 300;
+    font-size: clamp(3.5rem, 7vw, 6rem);
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    color: var(--white);
+  }
+
+  .hero-title em {
+    font-style: italic;
+    color: var(--cyan);
+  }
+
+  .hero-subtitle {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    border-left: 2px solid var(--amber);
+    padding-left: 1.2rem;
+    line-height: 1.8;
+  }
+
+  /* FACE MESH VISUAL */
+  .face-visual {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .face-svg-wrap {
+    position: relative;
+    width: 380px;
+    height: 480px;
+  }
+
+  .scan-line {
+    position: absolute;
+    left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+    animation: scan 3s ease-in-out infinite;
+    opacity: 0.7;
+    top: 0;
+  }
+
+  @keyframes scan {
+    0% { top: 0; opacity: 0; }
+    10% { opacity: 0.7; }
+    90% { opacity: 0.7; }
+    100% { top: 100%; opacity: 0; }
+  }
+
+  .face-svg-wrap svg { width: 100%; height: 100%; }
+
+  /* ─── PREGUNTA DE INVESTIGACIÓN ─── */
+  .research-q {
+    padding: 5rem 6rem;
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-label {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+    max-width: 80px;
+  }
+
+  .big-question {
+    font-size: clamp(1.6rem, 3vw, 2.4rem);
+    font-weight: 300;
+    font-style: italic;
+    line-height: 1.4;
+    max-width: 850px;
+    color: var(--white);
+    border-left: 3px solid var(--cyan);
+    padding-left: 2.5rem;
+  }
+
+  .big-question strong {
+    font-weight: 600;
+    font-style: normal;
+    color: var(--cyan);
+  }
+
+  /* ─── MARCO TEÓRICO ─── */
+  .framework {
+    padding: 5rem 6rem;
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: start;
+  }
+
+  .framework-left h2 {
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 300;
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+  }
+
+  .framework-left p {
+    font-size: 1.05rem;
+    color: rgba(240,237,232,0.7);
+    line-height: 1.75;
+    max-width: 440px;
+  }
+
+  .authors-grid { display: flex; flex-direction: column; gap: 1.5rem; }
+
+  .author-card {
+    border: 1px solid var(--border);
+    padding: 1.5rem 1.8rem;
+    position: relative;
+    background: rgba(0,229,200,0.02);
+    transition: background 0.3s;
+  }
+
+  .author-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--amber);
+  }
+
+  .author-card:nth-child(2)::before { background: var(--cyan); }
+
+  .author-name {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    color: var(--amber);
+    margin-bottom: 0.4rem;
+  }
+
+  .author-card:nth-child(2) .author-name { color: var(--cyan); }
+
+  .author-work {
+    font-style: italic;
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .author-desc {
+    font-size: 0.9rem;
+    color: rgba(240,237,232,0.6);
+    font-family: var(--font-mono);
+    line-height: 1.6;
+  }
+
+  /* ─── METODOLOGÍA ─── */
+  .methodology {
+    padding: 5rem 6rem;
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .method-header {
+    display: flex;
+    align-items: baseline;
+    gap: 2rem;
+    margin-bottom: 3.5rem;
+  }
+
+  .method-header h2 {
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 300;
+  }
+
+  .method-tag {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    color: var(--rose);
+    border: 1px solid rgba(255,77,109,0.3);
+    padding: 0.3rem 0.8rem;
+    text-transform: uppercase;
+  }
+
+  .phases-wrap {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    border: 1px solid var(--border);
+  }
+
+  .phase {
+    padding: 2.5rem;
+    border-right: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .phase:last-child { border-right: none; }
+
+  .phase::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s;
+  }
+
+  .phase:nth-child(1)::after { background: var(--cyan); }
+  .phase:nth-child(2)::after { background: var(--amber); }
+  .phase:nth-child(3)::after { background: var(--rose); }
+  .phase:hover::after { transform: scaleX(1); }
+
+  .phase-num {
+    font-family: var(--font-mono);
+    font-size: 3.5rem;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 1.2rem;
+    opacity: 0.08;
+    position: absolute;
+    top: 1rem;
+    right: 1.5rem;
+  }
+
+  .phase-badge {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    padding: 0.25rem 0.6rem;
+    border: 1px solid;
+    display: inline-block;
+  }
+
+  .phase:nth-child(1) .phase-badge { color: var(--cyan); border-color: rgba(0,229,200,0.3); }
+  .phase:nth-child(2) .phase-badge { color: var(--amber); border-color: rgba(245,166,35,0.3); }
+  .phase:nth-child(3) .phase-badge { color: var(--rose); border-color: rgba(255,77,109,0.3); }
+
+  .phase h3 {
+    font-size: 1.25rem;
+    font-weight: 400;
+    font-style: italic;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+  }
+
+  .phase-tasks {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .phase-tasks li {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: rgba(240,237,232,0.55);
+    line-height: 1.5;
+    padding-left: 1rem;
+    position: relative;
+  }
+
+  .phase-tasks li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--muted);
+  }
+
+  /* ─── GANTT ─── */
+  .gantt-section {
+    padding: 5rem 6rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .gantt-grid {
+    margin-top: 2.5rem;
+    overflow-x: auto;
+  }
+
+  .gantt-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+  }
+
+  .gantt-table th {
+    padding: 0.6rem 0.8rem;
+    text-align: left;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+
+  .gantt-table th.week-th {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.55rem;
+    padding: 0.4rem;
+    min-width: 28px;
+  }
+
+  .gantt-table td {
+    padding: 0.5rem 0.8rem;
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+    vertical-align: middle;
+    white-space: nowrap;
+    color: rgba(240,237,232,0.6);
+  }
+
+  .phase-cell {
+    font-style: italic;
+    font-family: var(--font-serif);
+    font-size: 0.75rem;
+    color: var(--white);
+    padding: 0.5rem 0.8rem;
+  }
+
+  .dot-cell { text-align: center; }
+  .dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; }
+  .dot-complete { background: var(--cyan); box-shadow: 0 0 6px var(--cyan); }
+  .dot-progress { background: var(--amber); box-shadow: 0 0 6px var(--amber); }
+  .dot-delay { background: var(--rose); }
+  .dot-none { background: var(--muted); opacity: 0.3; }
+
+  .task-name { color: rgba(240,237,232,0.7); max-width: 220px; white-space: normal; line-height: 1.4; }
+
+  .fase-row td:first-child { color: var(--white); font-weight: 700; font-style: italic; font-family: var(--font-serif); font-size: 0.8rem; }
+
+  /* ─── TECHNICAL STACK ─── */
+  .tech-stack {
+    padding: 5rem 6rem;
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .tech-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 2rem;
+    margin-top: 3rem;
+  }
+
+  .tech-card {
+    border: 1px solid var(--border);
+    padding: 2rem;
+    position: relative;
+    background: linear-gradient(135deg, rgba(0,229,200,0.02), transparent);
+  }
+
+  .tech-icon {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    color: var(--cyan);
+    letter-spacing: 0.2em;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+  }
+
+  .tech-name {
+    font-size: 1.5rem;
+    font-weight: 300;
+    margin-bottom: 0.5rem;
+  }
+
+  .tech-role {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    color: rgba(240,237,232,0.4);
+    line-height: 1.6;
+  }
+
+  /* PARAMETERS */
+  .params-section {
+    margin-top: 3rem;
+    border: 1px solid var(--border);
+    padding: 2rem;
+    background: rgba(0,0,0,0.3);
+  }
+
+  .params-title {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
+    color: var(--amber);
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+  }
+
+  .params-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+
+  .param-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .param-name {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--amber);
+    letter-spacing: 0.05em;
+  }
+
+  .param-desc {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    color: rgba(240,237,232,0.4);
+    line-height: 1.6;
+  }
+
+  .param-bar {
+    height: 2px;
+    background: rgba(245,166,35,0.15);
+    position: relative;
+    margin-top: 0.5rem;
+  }
+
+  .param-bar::after {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    background: var(--amber);
+    animation: bar-pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes bar-pulse {
+    0%, 100% { width: 30%; }
+    50% { width: 75%; }
+  }
+
+  .param-item:nth-child(2) .param-bar::after { animation-delay: 0.5s; }
+  .param-item:nth-child(3) .param-bar::after { animation-delay: 1s; }
+
+  /* ─── DESIGN DIMENSIONS ─── */
+  .dimensions {
+    padding: 5rem 6rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .dim-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 2.5rem;
+  }
+
+  .dim-table th {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--cyan);
+    text-align: left;
+    padding: 1rem 1.2rem;
+    border-bottom: 1px solid var(--cyan);
+    border-top: 1px solid var(--border);
+  }
+
+  .dim-table td {
+    padding: 1.1rem 1.2rem;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.88rem;
+    vertical-align: top;
+    line-height: 1.55;
+  }
+
+  .dim-table tr:hover td { background: rgba(0,229,200,0.02); }
+
+  .dim-table td:first-child {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--amber);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    width: 14%;
+  }
+
+  .dim-table td:nth-child(2) { color: rgba(240,237,232,0.8); width: 18%; font-style: italic; }
+  .dim-table td:nth-child(3) { color: rgba(240,237,232,0.6); width: 18%; font-family: var(--font-mono); font-size: 0.72rem; }
+  .dim-table td:nth-child(4) { color: rgba(240,237,232,0.85); width: 20%; }
+  .dim-table td:nth-child(5) { color: rgba(0,229,200,0.7); width: 15%; font-family: var(--font-mono); font-size: 0.68rem; }
+  .dim-table td:nth-child(6) { color: rgba(245,166,35,0.7); width: 15%; font-family: var(--font-mono); font-size: 0.68rem; }
+
+  /* ─── OPEN QUESTION ─── */
+  .open-question {
+    padding: 5rem 6rem;
+    background: var(--bg2);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .open-question::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 50% 80% at 50% 100%, rgba(255,77,109,0.07), transparent);
+  }
+
+  .open-question h2 {
+    font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+    font-weight: 300;
+    font-style: italic;
+    max-width: 700px;
+    margin: 0 auto 2rem;
+    line-height: 1.3;
+    position: relative;
+  }
+
+  .open-q-label {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    color: var(--rose);
+    text-transform: uppercase;
+    margin-bottom: 2rem;
+    position: relative;
+  }
+
+  .open-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    max-width: 900px;
+    margin: 3rem auto 0;
+    position: relative;
+  }
+
+  .open-card {
+    border: 1px solid rgba(255,77,109,0.2);
+    padding: 1.8rem;
+    text-align: left;
+    background: rgba(255,77,109,0.03);
+  }
+
+  .open-card-q {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    color: var(--rose);
+    margin-bottom: 0.8rem;
+    text-transform: uppercase;
+  }
+
+  .open-card p {
+    font-size: 0.95rem;
+    color: rgba(240,237,232,0.65);
+    line-height: 1.6;
+    font-style: italic;
+  }
+
+  /* ─── FOOTER ─── */
+  .footer {
+    padding: 2rem 6rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid var(--border);
+  }
+
+  .footer-brand {
+    font-family: var(--font-serif);
+    font-size: 1.2rem;
+    font-style: italic;
+    letter-spacing: -0.02em;
+  }
+
+  .footer-brand em { color: var(--cyan); }
+
+  .footer-meta {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    color: var(--muted);
+    text-align: right;
+    letter-spacing: 0.1em;
+    line-height: 1.8;
+  }
+
+  /* ─── ANIMATIONS ─── */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 0.8s ease forwards;
+  }
+
+  @keyframes fadeUp {
+    to { opacity: 1; transform: none; }
+  }
+
+  .fade-in:nth-child(2) { animation-delay: 0.15s; }
+  .fade-in:nth-child(3) { animation-delay: 0.3s; }
+  .fade-in:nth-child(4) { animation-delay: 0.45s; }
+
+  /* ─── RESPONSIVE PRINT ─── */
+  @media print {
+    body { background: white; color: black; }
+    .scan-line { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ╔══════════════ HERO ══════════════╗ -->
+<section class="hero">
+  <div class="hero-left">
+    <span class="tag fade-in">Propuesta Metodológica — Proyecto de Grado</span>
+    <h1 class="hero-title fade-in">
+      inter<em>Face</em><br>
+    </h1>
+    <div class="hero-subtitle fade-in">
+      El rostro como interfaz<br>
+      en entornos digitales<br>
+      ────────────────────<br>
+      Diseño Digital y Multimedia<br>
+      Research Through Design · 2026
+    </div>
+    <div style="display:flex; gap:1.5rem; margin-top:1rem;" class="fade-in">
+      <div style="text-align:center; border:1px solid var(--border); padding:0.8rem 1.2rem; flex:1;">
+        <div style="font-family:var(--font-mono); font-size:0.55rem; color:var(--muted); letter-spacing:0.2em; margin-bottom:0.4rem;">FASES</div>
+        <div style="font-size:1.8rem; font-weight:300;">3</div>
+      </div>
+      <div style="text-align:center; border:1px solid var(--border); padding:0.8rem 1.2rem; flex:1;">
+        <div style="font-family:var(--font-mono); font-size:0.55rem; color:var(--muted); letter-spacing:0.2em; margin-bottom:0.4rem;">SEMANAS</div>
+        <div style="font-size:1.8rem; font-weight:300;">14</div>
+      </div>
+      <div style="text-align:center; border:1px solid var(--border); padding:0.8rem 1.2rem; flex:1;">
+        <div style="font-family:var(--font-mono); font-size:0.55rem; color:var(--muted); letter-spacing:0.2em; margin-bottom:0.4rem;">PARÁMETROS</div>
+        <div style="font-size:1.8rem; font-weight:300;">3</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="face-visual">
+    <div class="face-svg-wrap">
+      <div class="scan-line"></div>
+      <svg viewBox="0 0 380 480" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Grid background -->
+        <defs>
+          <pattern id="grid" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
+            <path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(0,229,200,0.07)" stroke-width="0.5"/>
+          </pattern>
+          <radialGradient id="glow" cx="50%" cy="45%" r="50%">
+            <stop offset="0%" stop-color="rgba(0,229,200,0.15)"/>
+            <stop offset="100%" stop-color="transparent"/>
+          </radialGradient>
+        </defs>
+        <rect width="380" height="480" fill="url(#grid)"/>
+        <ellipse cx="190" cy="220" rx="160" ry="200" fill="url(#glow)"/>
+        
+        <!-- Face outline -->
+        <ellipse cx="190" cy="215" rx="105" ry="130" stroke="rgba(0,229,200,0.35)" stroke-width="1" stroke-dasharray="3,4"/>
+
+        <!-- Mesh dots - forehead -->
+        <g fill="rgba(0,229,200,0.5)" opacity="0.8">
+          <circle cx="150" cy="120" r="2"/>
+          <circle cx="165" cy="112" r="2"/>
+          <circle cx="180" cy="108" r="2.5"/>
+          <circle cx="195" cy="107" r="2.5"/>
+          <circle cx="210" cy="108" r="2"/>
+          <circle cx="225" cy="112" r="2"/>
+          <circle cx="240" cy="120" r="2"/>
+          <!-- Row 2 -->
+          <circle cx="145" cy="140" r="1.8"/>
+          <circle cx="160" cy="132" r="1.8"/>
+          <circle cx="175" cy="127" r="1.8"/>
+          <circle cx="190" cy="125" r="2"/>
+          <circle cx="205" cy="127" r="1.8"/>
+          <circle cx="220" cy="132" r="1.8"/>
+          <circle cx="235" cy="140" r="1.8"/>
+        </g>
+
+        <!-- Eyes zone -->
+        <g opacity="0.9">
+          <!-- Left eye -->
+          <ellipse cx="160" cy="185" rx="22" ry="12" stroke="rgba(0,229,200,0.6)" stroke-width="1" fill="none"/>
+          <circle cx="160" cy="185" r="7" stroke="var(--cyan)" stroke-width="1" fill="rgba(0,229,200,0.1)"/>
+          <circle cx="160" cy="185" r="3" fill="var(--cyan)" opacity="0.8"/>
+          <!-- Right eye -->
+          <ellipse cx="220" cy="185" rx="22" ry="12" stroke="rgba(0,229,200,0.6)" stroke-width="1" fill="none"/>
+          <circle cx="220" cy="185" r="7" stroke="var(--cyan)" stroke-width="1" fill="rgba(0,229,200,0.1)"/>
+          <circle cx="220" cy="185" r="3" fill="var(--cyan)" opacity="0.8">
+            <animate attributeName="opacity" values="0.8;0.2;0.8" dur="3s" repeatCount="indefinite"/>
+          </circle>
+        </g>
+
+        <!-- Nose -->
+        <g stroke="rgba(0,229,200,0.35)" stroke-width="1" fill="none">
+          <path d="M 190 195 L 178 230 Q 190 240 202 230 L 190 195"/>
+          <circle cx="178" cy="228" r="4" stroke="rgba(0,229,200,0.3)"/>
+          <circle cx="202" cy="228" r="4" stroke="rgba(0,229,200,0.3)"/>
+        </g>
+
+        <!-- Mouth - jaw open indicator -->
+        <g stroke="rgba(245,166,35,0.7)" stroke-width="1.5" fill="none">
+          <path d="M 165 258 Q 190 270 215 258" stroke-dasharray="2,2"/>
+          <path d="M 170 262 Q 190 282 210 262"/>
+          <path d="M 175 265 Q 190 290 205 265" opacity="0.5"/>
+        </g>
+
+        <!-- FacePosition arrows -->
+        <g stroke="rgba(245,166,35,0.4)" stroke-width="1" fill="none" opacity="0.7">
+          <line x1="50" y1="215" x2="140" y2="215" stroke-dasharray="3,3"/>
+          <polygon points="140,211 148,215 140,219" fill="rgba(245,166,35,0.4)"/>
+          <line x1="190" y1="60" x2="190" y2="100" stroke-dasharray="3,3"/>
+          <polygon points="186,100 190,108 194,100" fill="rgba(245,166,35,0.4)"/>
+        </g>
+
+        <!-- Mesh connections -->
+        <g stroke="rgba(0,229,200,0.1)" stroke-width="0.5">
+          <line x1="150" y1="120" x2="165" y2="112"/>
+          <line x1="165" y1="112" x2="180" y2="108"/>
+          <line x1="180" y1="108" x2="195" y2="107"/>
+          <line x1="195" y1="107" x2="210" y2="108"/>
+          <line x1="210" y1="108" x2="225" y2="112"/>
+          <line x1="225" y1="112" x2="240" y2="120"/>
+          <line x1="150" y1="120" x2="145" y2="140"/>
+          <line x1="240" y1="120" x2="235" y2="140"/>
+        </g>
+
+        <!-- Labels -->
+        <g font-family="'Space Mono', monospace" font-size="9" fill="rgba(0,229,200,0.7)">
+          <text x="68" y="210">facePosition</text>
+          <text x="155" y="52">facePosition_y</text>
+        </g>
+        <g font-family="'Space Mono', monospace" font-size="9" fill="rgba(245,166,35,0.8)">
+          <text x="148" y="304">faceJawOpen</text>
+          <text x="240" y="192">faceEyeBlink</text>
+        </g>
+
+        <!-- Corner markers -->
+        <g stroke="rgba(0,229,200,0.4)" stroke-width="1" fill="none">
+          <path d="M 10 10 L 10 30 M 10 10 L 30 10"/>
+          <path d="M 370 10 L 350 10 M 370 10 L 370 30"/>
+          <path d="M 10 470 L 10 450 M 10 470 L 30 470"/>
+          <path d="M 370 470 L 350 470 M 370 470 L 370 450"/>
+        </g>
+
+        <!-- OSC data stream visual -->
+        <g opacity="0.4">
+          <text x="10" y="460" font-family="'Space Mono',monospace" font-size="7" fill="var(--cyan)">OSC // ZIG SIM PRO → TOUCH DESIGNER</text>
+        </g>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- ╔══════════════ PREGUNTA ══════════════╗ -->
+<section class="research-q">
+  <div class="section-label">01 — Pregunta de Investigación</div>
+  <p class="big-question">
+    ¿Cómo puede un sistema audiovisual utilizar el <strong>rostro como interfaz</strong> en tiempo real para investigar nuevas formas de interacción entre el cuerpo y los <strong>entornos digitales</strong>?
+  </p>
+  <div style="margin-top: 2.5rem; font-family: var(--font-mono); font-size: 0.75rem; color: rgba(240,237,232,0.5); max-width: 800px; line-height: 1.8; border-top: 1px solid var(--border); padding-top: 1.5rem;">
+    Oportunidad identificada: en el estado del arte de experiencias inmersivas en Bogotá, <br>
+    el cuerpo opera de manera <em>pasiva</em> — mediado por dispositivos táctiles o móviles. <br>
+    No existe integración del rostro como <em>input</em> para la creación o modulación de entornos digitales en tiempo real.
+  </div>
+</section>
+
+<!-- ╔══════════════ MARCO TEÓRICO ══════════════╗ -->
+<section class="framework">
+  <div class="framework-left">
+    <div class="section-label">02 — Marco Teórico</div>
+    <h2>Interacción encarnada & somaestética</h2>
+    <p>El proyecto se sitúa en la intersección entre la filosofía fenomenológica del cuerpo y el diseño de interacción, articulando Heidegger y Merleau-Ponty a través de dos referentes centrales.</p>
+    <div style="margin-top:2rem; padding:1.5rem; border:1px solid var(--border); font-family:var(--font-mono); font-size:0.7rem; color: rgba(240,237,232,0.5);">
+      <div style="color:var(--cyan); margin-bottom:0.6rem;">APPROACH</div>
+      Research Through Design —<br>
+      Construcción iterativa de prototipos<br>
+      como forma de producción de conocimiento
+    </div>
+  </div>
+  <div class="authors-grid">
+    <div class="author-card">
+      <div class="author-name">Paul Dourish</div>
+      <div class="author-work">Where the Action Is:<br>The Foundations of Embodied Interaction</div>
+      <div class="author-desc">Retoma a Heidegger y Merleau-Ponty para comprender el significado encarnado. El cuerpo como agente activo en la interacción — no como receptor pasivo.</div>
+    </div>
+    <div class="author-card">
+      <div class="author-name">Kristina Höök</div>
+      <div class="author-work">Soma Design &<br>Somaesthetics aplicada al diseño</div>
+      <div class="author-desc">Sitúa la experiencia sensible del cuerpo en el centro del diseño. La piel, el gesto y la sensación como materiales de diseño.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ╔══════════════ METODOLOGÍA ══════════════╗ -->
+<section class="methodology">
+  <div class="method-header">
+    <div class="section-label" style="margin-bottom:0;">03 — Metodología</div>
+    <span class="method-tag">Research Through Design</span>
+  </div>
+
+  <div class="phases-wrap">
+    <div class="phase">
+      <div class="phase-num">01</div>
+      <div class="phase-badge">Feb — Mar 2026</div>
+      <h3>Fundamentación<br>& Exploración</h3>
+      <ul class="phase-tasks">
+        <li>Profundización Dourish (Embodied Interaction)</li>
+        <li>Profundización Höök (Soma Design)</li>
+        <li>Estado del arte: experiencias inmersivas en Bogotá</li>
+        <li>Investigación técnica: TouchDesigner, ZigSim Pro, OSC</li>
+        <li>Mapeo gestos faciales ↔ parámetros audiovisuales</li>
+        <li>Prototipo 0 — detección facial mínima funcional</li>
+      </ul>
+    </div>
+    <div class="phase">
+      <div class="phase-num">02</div>
+      <div class="phase-badge">Mar — May 2026</div>
+      <h3>Prototipado<br>Iterativo</h3>
+      <ul class="phase-tasks">
+        <li>Ciclo 1: Prototipo funcional básico (gestos → cambios visuales)</li>
+        <li>Ciclo 1: Prueba interna — observación de gestos espontáneos</li>
+        <li>Ciclo 2: Diseño entorno digital</li>
+        <li>Ciclo 2: Prueba con usuarios (3–5)</li>
+        <li>Ciclo 2: Análisis — patrones de interacción</li>
+        <li>Ciclo 3: Refinamiento técnico y expresivo</li>
+        <li>Ciclo 3: Presentación final en contexto abierto</li>
+      </ul>
+    </div>
+    <div class="phase">
+      <div class="phase-num">03</div>
+      <div class="phase-badge">May — Jun 2026</div>
+      <h3>Análisis<br>& Síntesis</h3>
+      <ul class="phase-tasks">
+        <li>Revisión de videos y notas de campo</li>
+        <li>Codificación temática cualitativa</li>
+        <li>Triangulación con marco teórico (Dourish / Höök)</li>
+        <li>Documentación de hallazgos</li>
+        <li>Design principles del sistema</li>
+        <li>Escritura y edición documento de grado</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ╔══════════════ GANTT ══════════════╗ -->
+<section class="gantt-section">
+  <div class="section-label">04 — Cronograma</div>
+  <div style="display:flex; gap:2rem; margin-bottom:1.5rem; font-family:var(--font-mono); font-size:0.6rem; color:var(--muted);">
+    <span><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--cyan);margin-right:6px;box-shadow:0 0 5px var(--cyan);"></span>Completo</span>
+    <span><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--amber);margin-right:6px;box-shadow:0 0 5px var(--amber);"></span>En proceso</span>
+    <span><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--rose);margin-right:6px;"></span>Retrasado</span>
+    <span><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--muted);margin-right:6px;opacity:0.4;"></span>No comenzado</span>
+  </div>
+  <div class="gantt-grid">
+    <table class="gantt-table">
+      <thead>
+        <tr>
+          <th style="min-width:80px;">Fase</th>
+          <th style="min-width:100px;">Categoría</th>
+          <th style="min-width:220px;">Tarea</th>
+          <th colspan="5" style="text-align:center; border-bottom:1px solid rgba(0,229,200,0.2); color:var(--cyan);">FEBRERO</th>
+          <th colspan="5" style="text-align:center; border-bottom:1px solid rgba(245,166,35,0.2); color:var(--amber);">MARZO</th>
+          <th colspan="4" style="text-align:center; border-bottom:1px solid rgba(255,77,109,0.2); color:var(--rose);">ABRIL</th>
+        </tr>
+        <tr>
+          <th></th><th></th><th></th>
+          <th class="week-th">S1</th><th class="week-th">S2</th><th class="week-th">S3</th><th class="week-th">S4</th><th class="week-th">S5</th>
+          <th class="week-th">S6</th><th class="week-th">S7</th><th class="week-th">S8</th><th class="week-th">S9</th><th class="week-th">S10</th>
+          <th class="week-th">S11</th><th class="week-th">S12</th><th class="week-th">S13</th><th class="week-th">S14</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- FASE 1 -->
+        <tr class="fase-row">
+          <td rowspan="7" style="color:var(--cyan)!important; border-right:1px solid rgba(0,229,200,0.2);">FASE 1<br><em style="font-size:0.65rem;color:var(--muted);">Fundamentación</em></td>
+          <td class="task-name">Marco Teórico</td>
+          <td class="task-name">Profundización Dourish</td>
+          <td class="dot-cell"><div class="dot dot-complete"></div></td>
+          <td class="dot-cell"><div class="dot dot-complete"></div></td>
+          <td class="dot-cell"><div class="dot dot-none"></div></td>
+          <td class="dot-cell"><div class="dot dot-none"></div></td>
+          <td class="dot-cell"><div class="dot dot-none"></div></td>
+          <td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td>
+          <td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td>
+        </tr>
+        <tr>
+          <td class="task-name">Marco Teórico</td>
+          <td class="task-name">Profundización Höök</td>
+          <td class="dot-cell"><div class="dot dot-complete"></div></td>
+          <td class="dot-cell"><div class="dot dot-progress"></div></td>
+          <td class="dot-cell"><div class="dot dot-none"></div></td>
+          <td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td>
+          <td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td>
+        </tr>
+        <tr>
+          <td class="task-name">Exploración Técnica</td>
+          <td class="task-name">Investigación tecnologías (TD, ZigSim)</td>
+          <td class="dot-cell"><div class="dot dot-complete"></div></td>
+          <td class="dot-cell"><div class="dot dot-complete"></div></td>
+          <td class="dot-cell"><div class="dot dot-complete"></div></td>
+          <td class="dot-cell"><div class="dot dot-progress"></div></td>
+          <td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td>
+          <td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td>
+        </tr>
+        <tr>
+          <td class="task-name">Definición obj.</td>
+          <td class="task-name">Objetivos definidos</td>
+          <td class="dot-cell"><div class="dot dot-complete"></div></td>
+          <td class="dot-cell"><div class="dot dot-complete"></div></td>
+          <td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td>
+          <td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td>
+        </tr>
+        <tr>
+          <td class="task-name">Estado del arte</td>
+          <td class="task-name">Experiencias inmersivas en Bogotá</td>
+          <td class="dot-cell"><div class="dot dot-complete"></div></td>
+          <td class="dot-cell"><div class="dot dot-complete"></div></td>
+          <td class="dot-cell"><div class="dot dot-complete"></div></td>
+          <td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td>
+          <td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td>
+        </tr>
+        <tr>
+          <td class="task-name">Conceptualización</td>
+          <td class="task-name">Mapeo gestos ↔ parámetros audiovisuales</td>
+          <td class="dot-cell"></td>
+          <td class="dot-cell"><div class="dot dot-complete"></div></td>
+          <td class="dot-cell"><div class="dot dot-complete"></div></td>
+          <td class="dot-cell"><div class="dot dot-progress"></div></td>
+          <td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td>
+          <td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td>
+        </tr>
+        <tr>
+          <td class="task-name">Conceptualización</td>
+          <td class="task-name">Prototipo 0 — detección facial mínima</td>
+          <td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td>
+          <td class="dot-cell"><div class="dot dot-progress"></div></td>
+          <td class="dot-cell"><div class="dot dot-none"></div></td>
+          <td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td>
+          <td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td>
+        </tr>
+
+        <!-- SEPARADOR -->
+        <tr style="height:4px; background:rgba(245,166,35,0.05);"><td colspan="17"></td></tr>
+
+        <!-- FASE 2 -->
+        <tr>
+          <td rowspan="7" style="color:var(--amber); border-right:1px solid rgba(245,166,35,0.2); font-family:var(--font-mono); font-size:0.7rem; font-weight:700; font-style:italic;">FASE 2<br><em style="font-size:0.65rem;color:var(--muted);">Prototipado</em></td>
+          <td class="task-name">Ciclo 1</td>
+          <td class="task-name">Prototipo funcional básico</td>
+          <td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td>
+          <td class="dot-cell"><div class="dot dot-none"></div></td>
+          <td class="dot-cell"><div class="dot dot-none"></div></td>
+          <td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td>
+          <td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td>
+        </tr>
+        <tr>
+          <td class="task-name">Ciclo 1</td>
+          <td class="task-name">Prueba interna — gestos espontáneos</td>
+          <td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td>
+          <td class="dot-cell"></td>
+          <td class="dot-cell"><div class="dot dot-none"></div></td>
+          <td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td>
+          <td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td>
+        </tr>
+        <tr>
+          <td class="task-name">Ciclo 2</td>
+          <td class="task-name">Diseño entorno digital</td>
+          <td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td>
+          <td class="dot-cell"></td>
+          <td class="dot-cell"><div class="dot dot-none"></div></td>
+          <td class="dot-cell"><div class="dot dot-none"></div></td>
+          <td class="dot-cell"></td><td class="dot-cell"></td>
+          <td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td>
+        </tr>
+        <tr>
+          <td class="task-name">Ciclo 2</td>
+          <td class="task-name">Prueba con usuarios (3–5)</td>
+          <td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td>
+          <td class="dot-cell"><div class="dot dot-none"></div></td>
+          <td class="dot-cell"></td>
+          <td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td>
+        </tr>
+        <tr>
+          <td class="task-name">Ciclo 2</td>
+          <td class="task-name">Análisis — patrones de interacción</td>
+          <td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td>
+          <td class="dot-cell"></td>
+          <td class="dot-cell"><div class="dot dot-none"></div></td>
+          <td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td>
+        </tr>
+        <tr>
+          <td class="task-name">Ciclo 3</td>
+          <td class="task-name">Refinamiento sistema</td>
+          <td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td>
+          <td class="dot-cell"><div class="dot dot-none"></div></td>
+          <td class="dot-cell"><div class="dot dot-none"></div></td>
+          <td class="dot-cell"></td><td class="dot-cell"></td>
+        </tr>
+        <tr>
+          <td class="task-name">Ciclo 3</td>
+          <td class="task-name">Presentación final en contexto abierto</td>
+          <td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td>
+          <td class="dot-cell"></td>
+          <td class="dot-cell"><div class="dot dot-none"></div></td>
+          <td class="dot-cell"></td>
+        </tr>
+
+        <!-- SEPARADOR -->
+        <tr style="height:4px; background:rgba(255,77,109,0.05);"><td colspan="17"></td></tr>
+
+        <!-- FASE 3 -->
+        <tr>
+          <td rowspan="4" style="color:var(--rose); border-right:1px solid rgba(255,77,109,0.2); font-family:var(--font-mono); font-size:0.7rem; font-weight:700; font-style:italic;">FASE 3<br><em style="font-size:0.65rem;color:var(--muted);">Análisis</em></td>
+          <td class="task-name">Análisis Cualitativo</td>
+          <td class="task-name">Codificación temática</td>
+          <td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td>
+          <td class="dot-cell"><div class="dot dot-none"></div></td>
+          <td class="dot-cell"><div class="dot dot-none"></div></td>
+        </tr>
+        <tr>
+          <td class="task-name">Análisis Cualitativo</td>
+          <td class="task-name">Triangulación con marco teórico</td>
+          <td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td>
+          <td class="dot-cell"><div class="dot dot-none"></div></td>
+          <td class="dot-cell"><div class="dot dot-none"></div></td>
+        </tr>
+        <tr>
+          <td class="task-name">Principios</td>
+          <td class="task-name">Design principles — documentación</td>
+          <td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td>
+          <td class="dot-cell"><div class="dot dot-none"></div></td>
+        </tr>
+        <tr>
+          <td class="task-name">Documento Final</td>
+          <td class="task-name">Escritura y edición documento de grado</td>
+          <td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td><td class="dot-cell"></td>
+          <td class="dot-cell"><div class="dot dot-none"></div></td>
+          <td class="dot-cell"><div class="dot dot-none"></div></td>
+          <td class="dot-cell"><div class="dot dot-none"></div></td>
+          <td class="dot-cell"><div class="dot dot-none"></div></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ╔══════════════ TECH STACK ══════════════╗ -->
+<section class="tech-stack">
+  <div class="section-label">05 — Stack Técnico</div>
+  <div class="tech-grid">
+    <div class="tech-card">
+      <div class="tech-icon">// Software principal</div>
+      <div class="tech-name">TouchDesigner</div>
+      <div class="tech-role">Motor en tiempo real para la síntesis audiovisual. Recibe datos OSC y mapea parámetros faciales a outputs visuales y sonoros.</div>
+    </div>
+    <div class="tech-card">
+      <div class="tech-icon">// Captura facial</div>
+      <div class="tech-name">ZigSim Pro</div>
+      <div class="tech-role">Detección de gestos faciales vía cámara frontal del dispositivo. Transmisión de datos en tiempo real por protocolo OSC.</div>
+    </div>
+    <div class="tech-card">
+      <div class="tech-icon">// Protocolo</div>
+      <div class="tech-name">OSC</div>
+      <div class="tech-role">Open Sound Control — protocolo de comunicación entre ZigSim Pro y TouchDesigner. Permite el flujo de datos en tiempo real por red local.</div>
+    </div>
+  </div>
+
+  <div class="params-section">
+    <div class="params-title">// Parámetros OSC definidos para modulación audiovisual</div>
+    <div class="params-grid">
+      <div class="param-item">
+        <div class="param-name">faceEyeBlink</div>
+        <div class="param-desc">Detección del parpadeo de los ojos.<br>Valor: 0.0 (abierto) → 1.0 (cerrado)</div>
+        <div class="param-bar"></div>
+      </div>
+      <div class="param-item">
+        <div class="param-name">faceJawOpen</div>
+        <div class="param-desc">Apertura de la mandíbula / boca.<br>Valor: 0.0 (cerrado) → 1.0 (abierto)</div>
+        <div class="param-bar"></div>
+      </div>
+      <div class="param-item">
+        <div class="param-name">facePosition</div>
+        <div class="param-desc">Posición XYZ del rostro en el espacio.<br>Valor: coordenadas normalizadas</div>
+        <div class="param-bar"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ╔══════════════ TABLA DIMENSIONES ══════════════╗ -->
+<section class="dimensions">
+  <div class="section-label">06 — Tabla de Dimensiones del Diseño</div>
+
+  <table class="dim-table">
+    <thead>
+      <tr>
+        <th>Dimensión</th>
+        <th>Factor de diseño</th>
+        <th>Subproblema</th>
+        <th>Requerimiento</th>
+        <th>Parámetros</th>
+        <th>Criterio de validación</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>INTERACCIÓN</td>
+        <td>Latencia sistema rostro → respuesta</td>
+        <td>Alta latencia rompe sensación de control corporal</td>
+        <td>El sistema debe responder en tiempo real (&lt;100ms perceptible)</td>
+        <td>facePosition, faceEyeBlink, faceJawOpen vía OSC</td>
+        <td>Usuario percibe respuesta inmediata sin desconexión cuerpo–entorno</td>
+      </tr>
+      <tr>
+        <td>EXPRESIÓN</td>
+        <td>Legibilidad gestual</td>
+        <td>Gestos faciales ambiguos o no distinguibles por el sistema</td>
+        <td>Los 3 parámetros deben mapearse a outputs diferenciados y significativos</td>
+        <td>Parpadeo → trigger / mandíbula → intensidad / posición → navegación</td>
+        <td>Usuarios identifican relación gesto → efecto en ≤ 2 min de exploración</td>
+      </tr>
+      <tr>
+        <td>CORPORAL</td>
+        <td>Comodidad y agencia del cuerpo</td>
+        <td>Posición estática o incómoda desmotiva la interacción</td>
+        <td>El sistema debe permitir movimiento natural sin restricción de postura</td>
+        <td>facePosition: rango espacial amplio; sin calibración rígida</td>
+        <td>Usuarios reportan sensación de libertad / agencia en entrevista post-prueba</td>
+      </tr>
+      <tr>
+        <td>AUDIOVISUAL</td>
+        <td>Coherencia modal sonido–imagen</td>
+        <td>Desconexión perceptiva entre output visual y sonoro</td>
+        <td>Parámetros faciales deben modular simultáneamente visual y audio de forma coherente</td>
+        <td>Mismo valor OSC → capa visual + síntesis sonora en paralelo</td>
+        <td>Usuarios describen experiencia como unitaria (no fragmentada) post-sesión</td>
+      </tr>
+      <tr>
+        <td>INMERSIÓN</td>
+        <td>Ausencia de mediación visible</td>
+        <td>Dispositivos o interfaces visibles rompen la ilusión inmersiva</td>
+        <td>El rostro debe operar como única interfaz sin artefactos físicos adicionales</td>
+        <td>Sensor: cámara frontal discreta; sin wearables; sin tocar nada</td>
+        <td>Usuarios no mencionan el dispositivo como elemento disruptivo</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ╔══════════════ PREGUNTA ABIERTA ══════════════╗ -->
+<section class="open-question">
+  <div class="open-q-label">07 — Territorio abierto</div>
+  <h2>¿Qué creará exactamente el rostro?<br>La pregunta que aún espera respuesta.</h2>
+  <div style="font-family:var(--font-mono); font-size:0.7rem; color:rgba(240,237,232,0.4); max-width:600px; margin:0 auto;">
+    Esta incertidumbre es parte del proceso Research Through Design —<br>
+    el prototipado iterativo revelará qué forma toma el entorno.
+  </div>
+  <div class="open-cards">
+    <div class="open-card">
+      <div class="open-card-q">Posibilidad A</div>
+      <p>Visuales reactivas puras — geometrías, campos de partículas o shaders que responden en tiempo real a los tres parámetros OSC, sin componente sonoro.</p>
+    </div>
+    <div class="open-card">
+      <div class="open-card-q">Posibilidad B</div>
+      <p>Sistema audiovisual integrado — el rostro modula simultáneamente síntesis visual y sonora: parpadeo como trigger, mandíbula como intensidad, posición como timbre.</p>
+    </div>
+    <div class="open-card">
+      <div class="open-card-q">Posibilidad C</div>
+      <p>Entorno narrativo o generativo — el rostro no solo modula sino que construye: cada gesto deposita capas en un entorno que se acumula y transforma en el tiempo.</p>
+    </div>
+  </div>
+  <div style="margin-top:2.5rem; font-family:var(--font-mono); font-size:0.65rem; color:rgba(255,77,109,0.5); letter-spacing:0.1em;">
+    → A definir en Ciclo 1 del Prototipado (Semanas 5–6)
+  </div>
+</section>
+
+<!-- ╔══════════════ FOOTER ══════════════╗ -->
+<footer class="footer">
+  <div class="footer-brand">inter<em>Face</em></div>
+  <div style="font-family:var(--font-mono); font-size:0.6rem; color:var(--muted); text-align:center; letter-spacing:0.15em;">
+    ZigSim Pro → OSC → TouchDesigner<br>
+    faceEyeBlink · faceJawOpen · facePosition
+  </div>
+  <div class="footer-meta">
+    Propuesta Metodológica<br>
+    Proyecto de Grado — Diseño Digital y Multimedia<br>
+    Research Through Design · 2026
+  </div>
+</footer>
+
+</body>
+</html>
